@@ -1,15 +1,11 @@
 import pyglet
-import math
+from pyglet.window.key import LEFT, RIGHT, UP, DOWN
 window = pyglet.window.Window()
 
 TILE_WIDTH = 64
 TILE_HEIGHT = 64
 FIELD_WIDTH = 10
 FIELD_HEIGHT = 10
-LEFT = 1
-RIGHT = 2
-UP = 3
-DOWN = 4
 
 
 
@@ -23,6 +19,12 @@ snake = pyglet.sprite.Sprite(square)
 position_x = 5 #position označuje buňky
 position_y = 5
 snake_tiles = [(1,1), (2,1), (2,2)]#last is head
+
+food = pyglet.image.load('apple.png')
+apple = pyglet.sprite.Sprite(food)
+apple.scale = 0.25 #zmenšení obrázku
+
+food_position = (7,7)
 
 def move_snake(direction):
     head = snake_tiles[-1]
@@ -45,28 +47,18 @@ def move_snake(direction):
 
 
 def drawing():
-    snake.x = position_x * TILE_WIDTH
-    snake.y = position_y * TILE_HEIGHT
     window.clear()
-    snake.draw()
+    for tile in snake_tiles:
+        snake.x = tile[0] * TILE_WIDTH
+        snake.y = tile[-1] * TILE_HEIGHT
+        snake.draw()
+    apple.x = food_position[0] * TILE_WIDTH
+    apple.y = food_position[1] * TILE_HEIGHT
+    apple.draw()
 
 def press_button(symbol, mode):
-    global position_x, position_y
-    print(symbol, mode)
-    if symbol == pyglet.window.key.UP:
-        if position_y + 1 < FIELD_HEIGHT:
-            position_y += 1
+    move_snake(symbol)
 
-    if symbol == pyglet.window.key.DOWN:
-        if position_y -1 >= 0:
-            position_y += -1
-
-    if symbol == pyglet.window.key.RIGHT:
-        if position_x + 1 < FIELD_WIDTH:
-            position_x += 1
-    if symbol == pyglet.window.key.LEFT:
-        if position_x -1 >= 0:
-            position_x += -1
 
 #def move()
 
